@@ -1,0 +1,24 @@
+name,description,parent,interval,timeout,send,receive
+ocp_ze_sit_cgw_mon,Zentity,http,2,5,/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_chat-core_mon,Zentity,http,2,5,/health/readiness,UP
+ocp_ze_sit_chat-agent_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_chat-customer_mon,Zentity,http,2,5,/testpage.html,200 OK
+ocp_ze_sit_zac-login_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_mva-dxl_mon,Zentity,http,2,5,/dxl/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_mva_mon,Zentity,http,2,5,/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_loy_mon,Zentity,http,2,5,core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_zac-mva_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_push_mon,Zentity,http,2,5,/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_esgw_mon,Zentity,http,2,5,/core/api/public/anonymous/ping/v1,ONLINE
+ocp_ze_sit_isgw_mon,Zentity,http,2,5,/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ze_sit_zac-psgw_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_web-ecare_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_web-login_mon,Zentity,http,2,5,/,200 OK
+ocp_ze_sit_zpp_mon,Zentity,http,2,5,/core/api/backend/anonymous/ping/v1,ONLINE
+ocp_ocs_sit_sitov-ocs_mon,OCS,http,2,5,/actuator/health,"\""status\"":\""UP\"""
+ocp_nc_sit_dms_mon,Netcracker,http,2,5,/nuxeo/runningstatus,200
+ocp_nc_sit_api-router_mon,Netcracker,http,2,5,/,200 OK
+ocp_nc_sit_tra-worker_mon,Netcracker,http,2,5,/tra/actuator/custom/health                                        ,200
+ocp_nc_sit_rabbitmq_mon_https,Netcracker,http,2,5,/,200 OK
+ocp_nc_sit_rabbitmq_mon_https_dc2,Netcracker,http,2,5,/,200 OK
+ocp_ocs_sit_prov-ocs_mon,Netcracker,http,2,5,/,201 OK
