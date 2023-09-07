@@ -1,0 +1,127 @@
+---
+- name: Configure Virtual Servers on BIG-IP
+  hosts: all
+  gather_facts: no
+  vars:
+    provider:
+      server: 10.14.255.233
+      user: odpansible
+      password: Big@#123@@
+      server_port: 443
+      validate_certs: no
+      
+  tasks:
+  
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/mon.csv
+      register: monitor_data
+  
+    - name: Creating Health Monitor
+      bigip_monitor_http:
+        provider: "{{ provider }}"
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        parent: "{{ item.parent }}"
+        interval: "{{ item.interval }}"
+        timeout: "{{ item.timeout }}"
+        send: "{{ item.send }}"
+        receive: "{{ item.receive }}"
+      loop: "{{ monitor_data.list }}"
+  
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/http.csv
+      register: http_data
+    
+    - name: Creating HTTP Profile
+      bigip_profile_http:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name }}"
+        partition: "{{ item.partition }}"
+        proxy_type: "{{ item.proxy_type }}"
+        parent: "{{ item.parent }}"
+        insert_xforwarded_for: "{{ item.insert_xforwarded_for }}"
+      loop: "{{ http_data.list }}"
+      
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/clientssl.csv
+      register: clientssl_data
+      
+    - name: Creating Client SSL Profile
+      bigip_profile_client_ssl:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name }}"
+        partition: "{{ item.partition }}"
+        parent: "{{ item.parent }}"
+      loop: "{{ clientssl_data.list }}"
+
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/serverssl.csv
+      register: serverssl_data
+      
+    - name: Creating Server SSL Profile
+      bigip_profile_server_ssl:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name }}"
+        partition: "{{ item.partition }}"
+        parent: "{{ item.parent }}"
+      loop: "{{ serverssl_data.list }}"
+      
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/pool.csv
+      register: pool_data  
+      
+    - name: Pool Creation
+      bigip_pool:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name }}"
+        lb_method: "{{ item.lb_method }}"
+        monitors: "{{ item.monitors }}"
+        slow_ramp_time: "{{ item.slow_ramp_time }}"
+      loop: "{{ pool_data.list }}"
+    
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/poolmember.csv
+      register: poolmem_data
+
+    - name: Adding Pool Members
+      bigip_pool_member:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name  }}"
+        description: "{{ item.description }}"
+        address: "{{ item.address }}"
+        priority_group: "{{ item.priority_group }}"
+        ratio: "{{ item.ratio }}"
+        pool: "{{ item.pool }}"
+        port: "{{ item.port }}"
+      loop: "{{ poolmem_data.list }}"        
+    
+
+    - name: Read CSV file
+      read_csv:
+        path: /root/tes/vs.csv
+      register: vs_data
+
+    - name: Create Virtual Servers
+      bigip_virtual_server:
+        provider: "{{ provider }}"
+        state: present
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        type: "{{ item.type }}"        
+        destination: "{{ item.destination }}"
+        port: "{{ item.port }}"
+        pool: "{{ item.pool }}"
+        snat: "{{ item.snat }}"
+        profiles: "{{ item.profiles.split(', ') }}"
+      loop: "{{ vs_data.list }}"
