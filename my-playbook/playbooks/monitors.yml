@@ -27,5 +27,5 @@
         timeout: "{{ item.timeout }}"
         send: "{{ item.send }}"
         receive: "{{ item.receive }}"
-      loop: "{{ monitor_data.list }}"
+      loop: "{{ csv_data.list }}"
 
