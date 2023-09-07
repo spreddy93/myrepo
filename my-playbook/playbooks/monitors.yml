@@ -1,6 +1,6 @@
 ---
 - name: Create BIG-IP Monitors 
-  hosts: localhost
+  hosts: all
   gather_facts: no
   vars:
     provider:
@@ -14,7 +14,7 @@
   
     - name: Load CSV data
       read_csv:
-        path: /data/mon.csv
+        path: my-playbook/data/mon.csv
       register: csv_data
 
     - name: Creating Health Monitor
